@@ -2,16 +2,16 @@
 
 namespace Server
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
             string[] prefixes = 
             { 
-                "http://localhost:8080/get/products/",
-                "http://localhost:8080/post/product/",
-                "http://localhost:8080/put/product/",
-                "http://localhost:8080/delete/produt/" 
+                "http://localhost:8080/products/",
+                "http://localhost:8080/product/",
+                "http://localhost:8080/product/",
+                "http://localhost:8080/produt/" 
             };
 
 
