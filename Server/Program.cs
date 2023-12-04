@@ -1,9 +1,12 @@
-﻿using System.Net;
+﻿using Server.Controller;
+using Server.Model;
+using System.Net;
 
 namespace Server
 {
     public class Program
     {
+        private static ProductController _controller = new();
         static void Main(string[] args)
         {
             string[] prefixes = 
@@ -23,6 +26,12 @@ namespace Server
             }
 
             listener.Start();
+
+            HttpListenerContext context = listener.GetContext();
+            HttpListenerRequest req = context.Request;
+            string method = req.HttpMethod.ToString();
+
+            _controller.GetResponse<ProductModel>(method);
         }
     }
 }
