@@ -1,6 +1,8 @@
 ﻿using Server.Controller;
 using Server.Model;
 using System.Net;
+using System.Text;
+using System.Text.Json;
 
 namespace Server
 {
@@ -31,7 +33,15 @@ namespace Server
             HttpListenerRequest req = context.Request;
             string method = req.HttpMethod.ToString();
 
-            _controller.GetResponse<ProductModel>(method);
+            var result = _controller.GetResponse<List<ProductModel>>(method);
+            var json = JsonSerializer.Serialize(result);
+
+            HttpListenerResponse response = context.Response;
+            response.ContentType = "application/json";
+            var buffer = Encoding.UTF8.GetBytes(json);
+            response.ContentLength64 = buffer.Length;
+            Stream output = response.OutputStream;
+            output.Write(buffer, 0, buffer.Length);
         }
     }
 }

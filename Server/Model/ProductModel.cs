@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 namespace Server.Model
 {
     public class ProductModel
+    {  
+        public string Id { get; set; }
+        public string Product { get; set; }
+        public double Price { get; set; }
+    }
+
+    public class ProductParams
     {
-        public int Id { get; set; }
         public string Product { get; set; }
         public double Price { get; set; }
     }
