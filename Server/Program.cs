@@ -26,24 +26,26 @@ namespace Server
             }
 
             listener.Start();
-
-            HttpListenerContext context = listener.GetContext();
-            HttpListenerRequest req = context.Request;
-            string method = req.HttpMethod.ToString();
-            HttpListenerResponse response = context.Response;
-
-            if (method == "GET")
+            while (true)
             {
-                var result = _controller.GetResponse<List<ProductModel>>(method, null);
-                json = JsonSerializer.Serialize(result);
-                ProcessResponse(json, response);
-            } else
-            {
-                Stream body = req.InputStream;
-                var reader = new StreamReader(body, req.ContentEncoding);
-                var content = reader.ReadToEnd();
-                var result = _controller.GetResponse<bool>(method, content);
-                ProcessResponse(Convert.ToString(result), response);
+                HttpListenerContext context = listener.GetContext();
+                HttpListenerRequest req = context.Request;
+                string method = req.HttpMethod.ToString();
+                HttpListenerResponse response = context.Response;
+
+                if (method == "GET")
+                {
+                    var result = _controller.GetResponse<List<ProductModel>>(method, null);
+                    json = JsonSerializer.Serialize(result);
+                    ProcessResponse(json, response);
+                } else
+                {
+                    Stream body = req.InputStream;
+                    var reader = new StreamReader(body, req.ContentEncoding);
+                    var content = reader.ReadToEnd();
+                    var result = _controller.GetResponse<bool>(method, content);
+                    ProcessResponse(Convert.ToString(result), response);
+                }
             }
         }
 
