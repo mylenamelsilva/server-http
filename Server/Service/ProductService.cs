@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Server.Service
@@ -12,16 +13,20 @@ namespace Server.Service
         List<ProductModel> products = new();
         public List<ProductModel> ListAllProducts()
         {
-            CreateProduct();
             return products.ToList();
         }
 
-        public bool CreateProduct()
+        public bool CreateProduct(string json)
         {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
 
+                var body = JsonSerializer.Deserialize<ProductParams>(json, options);
                 ProductModel product = new ProductModel();
-                product.Product = "Produto 1";
-                product.Price = 34;
+                product.Product = body.Product;
+                product.Price = body.Price;
                 product.Id = Guid.NewGuid().ToString();
                 products.Add(product);
                 return true;

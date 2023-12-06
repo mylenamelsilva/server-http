@@ -11,7 +11,7 @@ namespace Server.Controller
     public class ProductController
     {
         private ProductService _productService = new();
-        public T GetResponse<T>(string method)
+        public T GetResponse<T>(string method, string? json)
         {
             switch (method.ToLower())
             {
@@ -19,7 +19,8 @@ namespace Server.Controller
                     var res = GetProducts();
                     return (T)Convert.ChangeType(res, typeof(T));
                 case "post":
-                    break;
+                    var postRes = CreateProduct(json);
+                    return (T)Convert.ChangeType(postRes, typeof(T));
                 case "delete":
                     break;
                 case "update":
@@ -35,9 +36,10 @@ namespace Server.Controller
             return result;
         }
 
-        public bool CreateProduct()
+        public bool CreateProduct(string json)
         {
-            throw new NotImplementedException();
+            bool result = _productService.CreateProduct(json);
+            return result;
         }
 
         public bool DeleteProduct()

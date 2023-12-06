@@ -14,11 +14,9 @@ namespace Server
             string[] prefixes = 
             { 
                 "http://localhost:8080/products/",
-                "http://localhost:8080/product/",
-                "http://localhost:8080/product/",
-                "http://localhost:8080/produt/" 
+                "http://localhost:8080/product/"
             };
-
+            string json;
 
             HttpListener listener = new HttpListener();
             
@@ -32,11 +30,25 @@ namespace Server
             HttpListenerContext context = listener.GetContext();
             HttpListenerRequest req = context.Request;
             string method = req.HttpMethod.ToString();
-
-            var result = _controller.GetResponse<List<ProductModel>>(method);
-            var json = JsonSerializer.Serialize(result);
-
             HttpListenerResponse response = context.Response;
+
+            if (method == "GET")
+            {
+                var result = _controller.GetResponse<List<ProductModel>>(method, null);
+                json = JsonSerializer.Serialize(result);
+                ProcessResponse(json, response);
+            } else
+            {
+                Stream body = req.InputStream;
+                var reader = new StreamReader(body, req.ContentEncoding);
+                var content = reader.ReadToEnd();
+                var result = _controller.GetResponse<bool>(method, content);
+                ProcessResponse(Convert.ToString(result), response);
+            }
+        }
+
+        private static void ProcessResponse(string json, HttpListenerResponse response)
+        {
             response.ContentType = "application/json";
             var buffer = Encoding.UTF8.GetBytes(json);
             response.ContentLength64 = buffer.Length;
