@@ -31,5 +31,25 @@ namespace Server.Service
                 products.Add(product);
                 return true;
         }
+
+        public bool UpdateProduct(string json) {
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var body = JsonSerializer.Deserialize<ProductModel>(json, options);
+            var productToUpdate = products.Find(p => p.Id == body.Id);
+
+            if (productToUpdate == null)
+            {
+                return false;
+            }
+
+            productToUpdate.Product = body.Product;
+            productToUpdate.Price = body.Price;
+            return true;
+        }
     }
 }

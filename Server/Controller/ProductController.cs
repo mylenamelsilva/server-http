@@ -19,12 +19,13 @@ namespace Server.Controller
                     var res = GetProducts();
                     return (T)Convert.ChangeType(res, typeof(T));
                 case "post":
-                    var postRes = CreateProduct(json);
-                    return (T)Convert.ChangeType(postRes, typeof(T));
+                    var resBool = CreateProduct(json);
+                    return (T)Convert.ChangeType(resBool, typeof(T));
                 case "delete":
                     break;
-                case "update":
-                    break;
+                case "put":
+                    resBool = UpdateProduct(json);
+                    return (T)Convert.ChangeType(resBool, typeof(T));
             }
 
             return default(T);
@@ -47,9 +48,10 @@ namespace Server.Controller
             throw new NotImplementedException();
         }
 
-        public bool UpdateProduct()
+        public bool UpdateProduct(string json)
         {
-            throw new NotImplementedException();
+            bool result = _productService.UpdateProduct(json);
+            return result;
         }
     }
 }
