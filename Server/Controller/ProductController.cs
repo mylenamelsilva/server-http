@@ -22,7 +22,8 @@ namespace Server.Controller
                     var resBool = CreateProduct(json);
                     return (T)Convert.ChangeType(resBool, typeof(T));
                 case "delete":
-                    break;
+                    resBool = DeleteProduct(json);
+                    return (T)Convert.ChangeType(resBool, typeof(T));
                 case "put":
                     resBool = UpdateProduct(json);
                     return (T)Convert.ChangeType(resBool, typeof(T));
@@ -43,14 +44,15 @@ namespace Server.Controller
             return result;
         }
 
-        public bool DeleteProduct()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool UpdateProduct(string json)
         {
             bool result = _productService.UpdateProduct(json);
+            return result;
+        }
+
+        public bool DeleteProduct(string id)
+        {
+            bool result = _productService.DeleteProduct(id);
             return result;
         }
     }

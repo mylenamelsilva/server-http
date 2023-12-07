@@ -38,12 +38,22 @@ namespace Server
                     var result = _controller.GetResponse<List<ProductModel>>(method, null);
                     json = JsonSerializer.Serialize(result);
                     ProcessResponse(json, response);
-                } else
+                } else if (method == "DELETE")
                 {
+                    bool result;
+                    string content;
+                    var split = req.RawUrl.ToString().Split('/');
+                    content = split[2];
+                    result = _controller.GetResponse<bool>(method, content);
+                    ProcessResponse(Convert.ToString(result), response);
+                } else {
+                    bool result;
+                    string content;
                     Stream body = req.InputStream;
                     var reader = new StreamReader(body, req.ContentEncoding);
-                    var content = reader.ReadToEnd();
-                    var result = _controller.GetResponse<bool>(method, content);
+                    content = reader.ReadToEnd();
+                       
+                    result = _controller.GetResponse<bool>(method, content);
                     ProcessResponse(Convert.ToString(result), response);
                 }
             }

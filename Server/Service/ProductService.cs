@@ -51,5 +51,19 @@ namespace Server.Service
             productToUpdate.Price = body.Price;
             return true;
         }
+
+        public bool DeleteProduct(string id)
+        {
+
+            var productToUpdate = products.Find(p => p.Id == id);
+
+            if (productToUpdate == null)
+            {
+                return false;
+            }
+
+            products.Remove(productToUpdate);
+            return true;
+        }
     }
 }
