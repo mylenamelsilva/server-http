@@ -24,15 +24,16 @@ namespace Server
             {
                 listener.Prefixes.Add(prefix);
             }
-
+            Console.Clear();
             listener.Start();
+            Console.WriteLine("\nServer HTTP ON");
             while (true)
             {
                 HttpListenerContext context = listener.GetContext();
                 HttpListenerRequest req = context.Request;
                 string method = req.HttpMethod.ToString();
                 HttpListenerResponse response = context.Response;
-
+                HeaderRequest(req);
                 if (method == "GET")
                 {
                     var result = _controller.GetResponse<List<ProductModel>>(method, null);
@@ -66,6 +67,12 @@ namespace Server
             response.ContentLength64 = buffer.Length;
             Stream output = response.OutputStream;
             output.Write(buffer, 0, buffer.Length);
+        }
+
+        private static void HeaderRequest(HttpListenerRequest req)
+        {
+            Console.WriteLine($"\n{req.HttpMethod} {req.RawUrl} {req.ProtocolVersion}");
+            Console.WriteLine($"{req.Headers}");
         }
     }
 }
